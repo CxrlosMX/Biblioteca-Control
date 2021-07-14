@@ -125,10 +125,10 @@ public class Biblioteca {
                 if (matriz[i][j] != null && matriz[i][j].getId() == id) {
                     if (matriz[i][j].getCantidad() > 0) {
                         if (noEstaVaciaPrestados()) {
-                            for (int k = 0; k < listaPrestados.size(); k++) {
+                            for (int k = 0; k < listaPrestados.size() && !encontrado; k++) {
                                 if (matriz[i][j].getId() == listaPrestados.get(k).getId()) {
-                                    
-                                } else {
+
+                                } else if(k==listaPrestados.size()-1) {
                                     listaPrestados.add(matriz[i][j]);
                                 }
                             }
