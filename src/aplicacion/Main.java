@@ -93,17 +93,18 @@ public class Main {
                                         break;
                                     }
                                     case 2: {
-                                        if (b.noEstaVacia()) {
+                                        if (b.noEstaVaciaPrestados()) {
                                             b.mostrarLibrosPrestados();
                                         } else {
-                                            JOptionPane.showMessageDialog(null, "La lista esta vacia", "Sin Ningun Libro", 1);
+                                            JOptionPane.showMessageDialog(null, "La lista de los libros prestados esta vacia esta vacia", "Sin Ningun Libro", 1);
                                         }
 
                                         break;
                                     }
                                     case 3: {
                                         if (b.noEstaVacia()) {
-                                            id = Integer.parseInt(JOptionPane.showInputDialog(null, "Introduce el ID del libro que deseas reponer", "Introduce el ID", 1));
+                                            id = Integer.parseInt(JOptionPane.showInputDialog(null, "Introduce el ID del libro que sera prestado", "Introduce el ID", 1));
+
                                             b.reponerLibro(id);
                                         } else {
                                             JOptionPane.showMessageDialog(null, "La lista esta vacia", "Sin Ningun Libro", 1);

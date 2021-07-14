@@ -7,6 +7,7 @@ package biblioteca;
 
 import claseLibro.Libro;
 import java.util.ArrayList;
+import java.util.Date;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,7 +22,7 @@ import javax.swing.JOptionPane;
 public class Biblioteca {
 
     private Libro[][] matriz;
-    private int contador;
+    private int contador, prestados;
     private ArrayList<Libro> listaPrestados;
 
     //Constructorres 
@@ -29,12 +30,14 @@ public class Biblioteca {
         matriz = new Libro[fila][columna];
         listaPrestados = new ArrayList<Libro>();
         contador = -1;
+        prestados = -1;
     }
 
     public Biblioteca() {
         matriz = new Libro[3][3];
         listaPrestados = new ArrayList<Libro>();
         contador = -1;
+        prestados = -1;
     }
 
     //Metodo para rellenar un objeto Libro
@@ -105,9 +108,10 @@ public class Biblioteca {
         for (int i = 0; i < matriz.length; i++) {
             for (int j = 0; j < matriz[0].length; j++) {
                 if (matriz[i][j] != null) {
-                    System.out.println("Fila: " + i + " Columna: " + j);
-                    System.out.println(matriz[i][j]);
+                    System.out.println("Fila: " + i + " Columna: " + j + "                              ");
+                    System.out.println(matriz[i][j] + "                              ");
                 }
+                System.out.println("");
             }
         }
     }
@@ -118,11 +122,27 @@ public class Biblioteca {
         boolean encontrado = false;
         for (int i = 0; i < matriz.length && !encontrado; i++) {
             for (int j = 0; j < matriz[0].length && !encontrado; j++) {
-                if (matriz[i][j] != null && matriz[i][j].getId() == id && matriz[i][j].getCantidad() > 0) {
-                    listaPrestados.add(matriz[i][j]);
-                    matriz[i][j].setCantidad(matriz[i][j].getCantidad() - 1);
-                    JOptionPane.showMessageDialog(null, "El libro:\n" + matriz[i][j].getNombre() + " fue prestado", "Libro Prestado", 1);
-                    encontrado = true;
+                if (matriz[i][j] != null && matriz[i][j].getId() == id) {
+                    if (matriz[i][j].getCantidad() > 0) {
+                        if (noEstaVaciaPrestados()) {
+                            for (int k = 0; k < listaPrestados.size(); k++) {
+                                if (matriz[i][j].getId() == listaPrestados.get(k).getId()) {
+                                    
+                                } else {
+                                    listaPrestados.add(matriz[i][j]);
+                                }
+                            }
+                        } else {
+                            listaPrestados.add(matriz[i][j]);
+                        }
+                        prestados++;
+                        matriz[i][j].setCantidad(matriz[i][j].getCantidad() - 1);
+                        JOptionPane.showMessageDialog(null, "El libro:\n" + matriz[i][j].getNombre() + " fue prestado", "Libro Prestado", 1);
+                        encontrado = true;
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Libros Insuficientes para realizar el prestamo", "Libro Escaso", 2);
+                        encontrado = true;
+                    }
                 }
             }
         }
@@ -133,8 +153,10 @@ public class Biblioteca {
 
     //Metodo para mostrar libros prestados
     public void mostrarLibrosPrestados() {
+
         for (Libro i : listaPrestados) {
             System.out.println("ID: " + i.getId() + "\nLibro: " + i.getNombre());
+            System.out.println("");
         }
     }
 
@@ -143,11 +165,16 @@ public class Biblioteca {
         boolean encontrado = false;
         for (int i = 0; i < matriz.length && !encontrado; i++) {
             for (int j = 0; j < matriz[0].length && !encontrado; j++) {
-                if (matriz[i][j] != null && matriz[i][j].getId() == id) {
-                    matriz[i][j].setCantidad(matriz[i][j].getCantidad() + 1);
-                    JOptionPane.showMessageDialog(null, "El libro " + matriz[i][j].getNombre() + " fue agregado en la biblioteca"
-                            + "\nCantidad: " + matriz[i][j].getCantidad(), "Agregado", 1);
-                    encontrado = true;
+                if (matriz[i][j] != null) {
+                    for (int k = 0; k < listaPrestados.size() && !encontrado; k++) {
+                        if (listaPrestados.get(k).getId() == id && matriz[i][j].getId() == id) {
+                            matriz[i][j].setCantidad(matriz[i][j].getCantidad() + 1);
+                            JOptionPane.showMessageDialog(null, "El libro " + matriz[i][j].getNombre() + " fue agregado en la biblioteca"
+                                    + "\nCantidad: " + matriz[i][j].getCantidad(), "Agregado", 1);
+                            encontrado = true;
+                        }
+                    }
+
                 }
             }
         }
@@ -164,6 +191,11 @@ public class Biblioteca {
     //Metodo para verificar si la lista tiene espacios 
     public boolean tieneEspacios() {
         return (contador != matriz.length);
+    }
+
+    //Método para verificar si la lista de los libros prestados esta vacia
+    public boolean noEstaVaciaPrestados() {
+        return (prestados != -1);
     }
 
 }
